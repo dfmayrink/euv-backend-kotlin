@@ -1,0 +1,17 @@
+spring:
+  security:
+    jwt:
+      token:
+        secret-key: g4m30v3r53cr37
+        expire-length: 86400000
+  data:
+    mongodb:
+      database: cafeteria
+      uri: mongodb://cafeteria-user:cafeteria-password@localhost:27017/cafeteria
+
+springdoc:
+  packagesToScan: com.euv.euvbackendkotlin.api
+
+logging:
+  level:
+    root: info
