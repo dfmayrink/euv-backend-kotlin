@@ -1,20 +1,25 @@
 package com.euv.euvbackendkotlin.config
 
-import com.euv.euvbackendkotlin.security.jwt.JwtTokenFilter
 import com.euv.euvbackendkotlin.security.jwt.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
+import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity.AuthorizeExchangeSpec
+import org.springframework.security.config.web.server.ServerHttpSecurity.OAuth2ResourceServerSpec
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsConfigurationSource
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
@@ -60,24 +65,14 @@ class SecurityConfig {
     }
 
     @Bean
-    fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain? {
-        val customFilter = JwtTokenFilter(tokenProvider)
-
+    fun webHttpSecurity(http: ServerHttpSecurity): SecurityWebFilterChain? {
         http
             .authorizeExchange { exchanges: AuthorizeExchangeSpec ->
                 exchanges
-                    .pathMatchers("/auth/signin",
-                        "/auth/signup", "/auth/refresh", "/actuator/**", "/swagger-ui.html", "/v3/api-docs").permitAll()
                     .anyExchange().authenticated()
             }
-            .csrf().disable()
-            .httpBasic().disable()
-            .formLogin().disable()
-            .addFilterBefore(customFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-//            .oauth2ResourceServer().jwt()
-
+            .httpBasic(withDefaults())
         return http.build()
     }
-
 
 }
