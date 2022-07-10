@@ -1,7 +1,6 @@
 package com.euv.euvbackendkotlin.config
 
-import com.euv.euvbackendkotlin.security.jwt.JwtTokenFilter
-import com.euv.euvbackendkotlin.security.jwt.JwtTokenProvider
+import com.euv.euvbackendkotlin.security.jwt.JwtAuthenticationConverter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,13 +10,16 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity.AuthorizeExchangeSpec
+import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsConfigurationSource
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
+import reactor.core.publisher.Mono
 
 
 @Configuration
@@ -25,10 +27,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 class SecurityConfig {
 
     @Autowired
-    private lateinit var tokenProvider: JwtTokenProvider
-
-    @Autowired
-    private lateinit var userDetailsService: com.euv.euvbackendkotlin.services.UserDetailsService
+    private lateinit var jwtAuthenticationConverter: JwtAuthenticationConverter
 
     @Bean
     fun reactiveAuthenticationManager(
@@ -61,7 +60,10 @@ class SecurityConfig {
 
     @Bean
     fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain? {
-        val customFilter = JwtTokenFilter(tokenProvider)
+        val authFilter = AuthenticationWebFilter { authentication: Authentication ->
+            Mono.just(authentication)
+        }
+        authFilter.setServerAuthenticationConverter(jwtAuthenticationConverter)
 
         http
             .authorizeExchange { exchanges: AuthorizeExchangeSpec ->
@@ -73,8 +75,7 @@ class SecurityConfig {
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()
-            .addFilterBefore(customFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-//            .oauth2ResourceServer().jwt()
+            .addFilterAt(authFilter, SecurityWebFiltersOrder.AUTHENTICATION)
 
         return http.build()
     }
