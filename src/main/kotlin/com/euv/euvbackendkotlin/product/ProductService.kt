@@ -1,7 +1,7 @@
-package com.euv.euvbackendkotlin.services
+package com.euv.euvbackendkotlin.product
 
-import com.euv.euvbackendkotlin.repository.ProductRepository
-import com.euv.euvbackendkotlin.model.Product
+import com.euv.euvbackendkotlin.product.ProductRepository
+import com.euv.euvbackendkotlin.product.Product
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

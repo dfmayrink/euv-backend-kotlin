@@ -1,6 +1,6 @@
-package com.euv.euvbackendkotlin.repository
+package com.euv.euvbackendkotlin.user
 
-import com.euv.euvbackendkotlin.model.User
+import com.euv.euvbackendkotlin.user.User
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Mono

@@ -1,4 +1,4 @@
-package com.euv.euvbackendkotlin.security.jwt
+package com.euv.euvbackendkotlin.security
 
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired

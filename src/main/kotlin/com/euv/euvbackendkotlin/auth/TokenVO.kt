@@ -1,4 +1,4 @@
-package com.euv.euvbackendkotlin.data.vo.v1
+package com.euv.euvbackendkotlin.auth
 
 import java.util.*
 

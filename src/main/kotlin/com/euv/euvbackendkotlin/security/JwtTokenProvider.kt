@@ -1,10 +1,10 @@
-package com.euv.euvbackendkotlin.security.jwt
+package com.euv.euvbackendkotlin.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.euv.euvbackendkotlin.data.vo.v1.TokenVO
+import com.euv.euvbackendkotlin.auth.TokenVO
 import com.euv.euvbackendkotlin.exceptions.InvalidJwtAuthenticationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -12,7 +12,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.util.*

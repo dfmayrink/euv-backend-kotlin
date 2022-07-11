@@ -1,4 +1,4 @@
-package com.euv.euvbackendkotlin.model
+package com.euv.euvbackendkotlin.product
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id

@@ -1,7 +1,7 @@
-package com.euv.euvbackendkotlin.api
+package com.euv.euvbackendkotlin.product
 
-import com.euv.euvbackendkotlin.model.Product
-import com.euv.euvbackendkotlin.services.ProductService
+import com.euv.euvbackendkotlin.product.Product
+import com.euv.euvbackendkotlin.product.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

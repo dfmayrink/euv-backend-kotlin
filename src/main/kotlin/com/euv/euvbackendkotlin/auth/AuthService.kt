@@ -1,10 +1,9 @@
-package com.euv.euvbackendkotlin.services
+package com.euv.euvbackendkotlin.auth
 
-import com.euv.euvbackendkotlin.data.vo.v1.AccountCredentialsVO
-import com.euv.euvbackendkotlin.data.vo.v1.TokenVO
-import com.euv.euvbackendkotlin.model.User
-import com.euv.euvbackendkotlin.repository.UserRepository
-import com.euv.euvbackendkotlin.security.jwt.JwtTokenProvider
+import com.euv.euvbackendkotlin.user.User
+import com.euv.euvbackendkotlin.user.UserRepository
+import com.euv.euvbackendkotlin.security.JwtTokenProvider
+import com.euv.euvbackendkotlin.user.UserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
 import java.util.logging.Logger
 
 @Service

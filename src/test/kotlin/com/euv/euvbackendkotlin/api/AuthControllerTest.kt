@@ -1,10 +1,11 @@
 package com.euv.euvbackendkotlin.api
 
+import com.euv.euvbackendkotlin.auth.AuthController
 import com.euv.euvbackendkotlin.config.SpringSecurityTestConfig
-import com.euv.euvbackendkotlin.data.vo.v1.AccountCredentialsVO
-import com.euv.euvbackendkotlin.repository.UserRepository
-import com.euv.euvbackendkotlin.security.jwt.JwtTokenProvider
-import com.euv.euvbackendkotlin.services.AuthService
+import com.euv.euvbackendkotlin.auth.AccountCredentialsVO
+import com.euv.euvbackendkotlin.user.UserRepository
+import com.euv.euvbackendkotlin.security.JwtTokenProvider
+import com.euv.euvbackendkotlin.auth.AuthService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest

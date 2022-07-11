@@ -1,9 +1,6 @@
-package com.euv.euvbackendkotlin.api
+package com.euv.euvbackendkotlin.auth
 
-import com.euv.euvbackendkotlin.data.vo.v1.AccountCredentialsVO
-import com.euv.euvbackendkotlin.data.vo.v1.TokenVO
-import com.euv.euvbackendkotlin.model.User
-import com.euv.euvbackendkotlin.services.AuthService
+import com.euv.euvbackendkotlin.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

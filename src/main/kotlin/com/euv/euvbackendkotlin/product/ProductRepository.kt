@@ -1,6 +1,5 @@
-package com.euv.euvbackendkotlin.repository
+package com.euv.euvbackendkotlin.product
 
-import com.euv.euvbackendkotlin.model.Product
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository

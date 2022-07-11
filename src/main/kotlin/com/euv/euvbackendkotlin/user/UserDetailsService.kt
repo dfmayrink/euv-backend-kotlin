@@ -1,6 +1,5 @@
-package com.euv.euvbackendkotlin.services
+package com.euv.euvbackendkotlin.user
 
-import com.euv.euvbackendkotlin.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails

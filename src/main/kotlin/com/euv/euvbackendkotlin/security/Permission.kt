@@ -1,4 +1,4 @@
-package com.euv.euvbackendkotlin.model
+package com.euv.euvbackendkotlin.security
 
 import org.springframework.security.core.GrantedAuthority
 
