@@ -9,8 +9,12 @@ spring:
       database: cafeteria
       uri: mongodb://cafeteria-user:cafeteria-password@localhost:27017/cafeteria
 
+
 springdoc:
   packagesToScan: com.euv.euvbackendkotlin.api
+
+file:
+  upload-dir: ./uploadDir
 
 logging:
   level:

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
@@ -17,6 +18,11 @@ class ProductController {
 
     @Autowired
     lateinit var productService: ProductService
+
+    @GetMapping
+    fun getAllProduct() : Flux<Product> {
+        return productService.findAll();
+    }
 
     @GetMapping("/{id}")
     fun getProduct(@PathVariable id: String): Mono<Product> {

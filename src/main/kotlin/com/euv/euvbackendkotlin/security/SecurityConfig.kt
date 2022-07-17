@@ -51,8 +51,9 @@ class SecurityConfig {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("https://eraumavezbh.com.br", "http://localhost:8080")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowedOrigins = listOf("https://eraumavezbh.com.br", "http://localhost:3001")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+        configuration.allowedHeaders = listOf("*")
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
@@ -69,9 +70,10 @@ class SecurityConfig {
             .authorizeExchange { exchanges: AuthorizeExchangeSpec ->
                 exchanges
                     .pathMatchers("/auth/signin",
-                        "/auth/signup", "/auth/refresh", "/actuator/**", "/swagger-ui.html", "/v3/api-docs").permitAll()
+                        "/auth/signup", "/auth/refresh", "/actuator/**", "/swagger-ui.html", "/v3/api-docs", "/files/**").permitAll()
                     .anyExchange().authenticated()
             }
+            .cors().and()
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()

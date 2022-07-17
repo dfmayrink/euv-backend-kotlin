@@ -38,8 +38,8 @@ class AuthService {
     private val logger = Logger.getLogger(AuthService::class.java.name)
 
     fun signin(data: AccountCredentialsVO): Mono<TokenVO> {
-        logger.info("Trying log user ${data.username}")
-        val username = data.username
+        logger.info("Trying log user ${data.email}")
+        val username = data.email
         val password = data.password
         val authenticate = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(username, password))
         val retorno = authenticate.map {
@@ -51,7 +51,7 @@ class AuthService {
     }
 
     suspend fun signup(data: AccountCredentialsVO): User {
-        val username = data.username!!
+        val username = data.email!!
         val existingUser = userRepository.findByUsername(username)
         if (existingUser != null) throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "User already exists")
         val user = User()

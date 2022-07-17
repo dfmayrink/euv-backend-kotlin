@@ -17,7 +17,7 @@ class AuthController {
 
     @PostMapping(value = ["/signin"])
     fun signin(@RequestBody data: AccountCredentialsVO?) : Mono<TokenVO> {
-        return if (data!!.username.isNullOrBlank() || data.password.isNullOrBlank())
+        return if (data!!.email.isNullOrBlank() || data.password.isNullOrBlank())
                 Mono.error(ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request"))
             else authService.signin(data!!)
     }
