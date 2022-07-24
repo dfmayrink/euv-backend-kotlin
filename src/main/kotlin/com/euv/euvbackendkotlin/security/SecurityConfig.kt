@@ -71,8 +71,8 @@ class SecurityConfig {
         http
             .authorizeExchange { exchanges: AuthorizeExchangeSpec ->
                 exchanges
-                    .pathMatchers("/auth/signin",
-                        "/auth/signup", "/auth/refresh", "/actuator/**", "/swagger-ui.html", "/v3/api-docs", "/files/**").permitAll()
+                    .pathMatchers("/graphql", "/auth/signin", "/auth/signup", "/auth/refresh",
+                        "/actuator/**", "/files/**").permitAll()
                     .anyExchange().authenticated()
             }
             .cors().and()

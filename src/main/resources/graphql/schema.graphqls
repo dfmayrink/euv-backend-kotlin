@@ -1,14 +1,45 @@
 type Query {
     employees: [Employee]
+    products(name: String): [Product]
 }
 type Mutation {
-    # restricted
     updateSalary(input: UpdateSalaryInput!): UpdateSalaryPayload
+    createProduct(product: ProductInput): Product
 }
+
+type Product {
+    id: ID!
+    name: String!
+    description: String!
+    images: [String]
+    code: String
+    sku: String
+    price: Float!
+    priceSale: Float
+    tags: [String]
+    inStock: Boolean
+    taxes: Boolean
+    category: String!
+    createdAt: String
+}
+
+input ProductInput {
+    name: String!
+    description: String!
+    images: [String],
+    code: String
+    sku: String
+    price: Float!
+    priceSale: Float
+    tags: [String]
+    inStock: Boolean
+    taxes: Boolean
+    category: String!
+}
+
 type Employee {
     id: ID!
     name: String
-    # restricted
     salary: String
 }
 

@@ -1,6 +1,5 @@
 package com.euv.euvbackendkotlin.user
 
-import com.euv.euvbackendkotlin.security.Permission
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -25,7 +24,7 @@ class User : UserDetails {
         get() {
             val roles: MutableList<String?> = ArrayList()
             for (permission in permissions!!) {
-                roles.add(permission.description)
+                roles.add(permission.desc)
             }
             return roles
         }

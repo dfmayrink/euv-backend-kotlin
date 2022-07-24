@@ -20,17 +20,17 @@ class ProductController {
     lateinit var productService: ProductService
 
     @GetMapping
-    fun getAllProduct() : Flux<Product> {
+    fun getAllProduct() : Flux<ProductDto> {
         return productService.findAll();
     }
 
     @GetMapping("/{id}")
-    fun getProduct(@PathVariable id: String): Mono<Product> {
+    fun getProduct(@PathVariable id: String): Mono<ProductDto> {
         return productService.findById(id);
     }
 
     @PostMapping
-    fun postProduct(@RequestBody product: Product) : Mono<Product> {
-        return productService.create(product)
+    fun postProduct(@RequestBody productDto: ProductDto) : Mono<ProductDto> {
+        return productService.create(productDto)
     }
 }

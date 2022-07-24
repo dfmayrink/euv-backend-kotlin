@@ -1,13 +1,9 @@
 package com.euv.euvbackendkotlin.product
 
 import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import java.util.Date
+import java.util.*
 
-@Document
-data class Product(
-    @Id
+data class ProductDto(
     var id: ObjectId? = null,
     var name: String? = null,
     var description: String? = null,
@@ -20,5 +16,5 @@ data class Product(
     var inStock: Boolean? = null,
     var taxes: Boolean? = null,
     var category: String? = null,
-    var createdAt: Date? = Date()
+    var createdAt: Date? = null
 )

@@ -107,7 +107,7 @@ class JwtTokenProvider {
     fun validateToken(token: String): Boolean {
         val decodedJWT = decodedToken(token)
         try {
-            if(decodedJWT.expiresAt.before(Date())) false
+            if(decodedJWT.expiresAt.before(Date())) return false
             return true
         } catch (e: Exception) {
             throw InvalidJwtAuthenticationException("Expired or invalid JWT token!")

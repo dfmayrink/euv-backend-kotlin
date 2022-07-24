@@ -3,6 +3,7 @@ package com.euv.euvbackendkotlin.auth
 import com.euv.euvbackendkotlin.user.User
 import com.euv.euvbackendkotlin.user.UserRepository
 import com.euv.euvbackendkotlin.security.JwtTokenProvider
+import com.euv.euvbackendkotlin.user.Permission
 import com.euv.euvbackendkotlin.user.UserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -43,7 +44,7 @@ class AuthService {
         val password = data.password
         val authenticate = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(username, password))
         val retorno = authenticate.map {
-            tokenProvider.createAccessToken(it.name, it.authorities.map { it -> it.toString() })
+            tokenProvider.createAccessToken(it.name, it.authorities.map { aut -> aut.toString() })
         }.onErrorMap {
             ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request")
         }
@@ -57,6 +58,7 @@ class AuthService {
         val user = User()
         user.username = username
         user.password = passwordEncoder.encode(data.password!!)
+        user.permissions = listOf<Permission>(Permission("ROLE_USER")).toMutableList()
         return userRepository.save(user)
     }
 

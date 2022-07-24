@@ -1,0 +1,28 @@
+#type Product {
+#    id: ID!
+#    name: String!
+#    description: String!
+#    images: [String],
+#    code: String
+#    sku: String
+#    price: Float
+#    priceSale: Float
+#    tags: [String]
+#    inStock: Boolean
+#    taxes: Boolean
+#    category: String
+#}
+#
+#input ProductInput {
+#    name: String!
+#    description: String!
+#    images: [String],
+#    code: String
+#    sku: String
+#    price: Float
+#    priceSale: Float
+#    tags: [String]
+#    inStock: Boolean
+#    taxes: Boolean
+#    category: String
+#}
