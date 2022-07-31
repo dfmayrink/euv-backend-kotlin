@@ -1,6 +1,5 @@
 package com.euv.euvbackendkotlin.security
 
-import com.euv.euvbackendkotlin.security.JwtAuthenticationConverter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
