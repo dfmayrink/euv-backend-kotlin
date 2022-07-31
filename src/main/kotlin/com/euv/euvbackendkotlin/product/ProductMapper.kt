@@ -4,7 +4,7 @@ object ProductMapper {
     fun convertToDto(product: Product) : ProductDto {
         product.apply {
             return ProductDto(id, name, description, images, code, sku, price, priceSale, tags, inStock,
-                taxes, category, createdAt)
+                taxes, this.category, createdAt)
         }
     }
     fun convertToModel(productInput: ProductDto) : Product {

@@ -1,10 +1,12 @@
 type Query {
     employees: [Employee]
     products(name: String): [Product]
+    categories(name: String): [Category]
 }
 type Mutation {
     updateSalary(input: UpdateSalaryInput!): UpdateSalaryPayload
     createProduct(product: ProductInput): Product
+    createCategory(category: CategoryInput): Category
 }
 
 type Product {
@@ -35,6 +37,19 @@ input ProductInput {
     inStock: Boolean
     taxes: Boolean
     category: String!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    description: String
+    classify: [String]!
+}
+
+input CategoryInput {
+    name: String!
+    description: String
+    classify: [String]!
 }
 
 type Employee {
