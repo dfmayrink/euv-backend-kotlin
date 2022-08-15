@@ -31,9 +31,7 @@ class CategoryGQLController(private val categoryService: CategoryService) {
     }
 
     @MutationMapping
-    fun
-
-            createCategory(@Argument("category") categoryDto: CategoryDto): Mono<CategoryDto> {
+    fun createCategory(@Argument("category") categoryDto: CategoryDto): Mono<CategoryDto> {
         return categoryService.create(categoryDto)
     }
 }

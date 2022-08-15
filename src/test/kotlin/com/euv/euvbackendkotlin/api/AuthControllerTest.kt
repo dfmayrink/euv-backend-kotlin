@@ -1,6 +1,6 @@
 package com.euv.euvbackendkotlin.api
 
-import com.euv.euvbackendkotlin.auth.AccountCredentialsVO
+import com.euv.euvbackendkotlin.auth.AccountCredentialsDto
 import com.euv.euvbackendkotlin.auth.AuthController
 import com.euv.euvbackendkotlin.auth.AuthService
 import com.euv.euvbackendkotlin.config.SpringSecurityTestConfig
@@ -31,7 +31,7 @@ internal class AuthControllerTest {
 
     @Test
     fun signin() {
-        var accountCredentialsVO = AccountCredentialsVO("test", "test")
+        var accountCredentialsVO = AccountCredentialsDto("test", "test")
         val result = webClient.post().uri("signin").contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(accountCredentialsVO))
             .exchange()

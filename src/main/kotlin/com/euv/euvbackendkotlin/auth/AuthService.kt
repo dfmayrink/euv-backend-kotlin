@@ -1,10 +1,12 @@
 package com.euv.euvbackendkotlin.auth
 
+import com.euv.euvbackendkotlin.exceptions.GraphqlException
 import com.euv.euvbackendkotlin.security.JwtTokenProvider
 import com.euv.euvbackendkotlin.user.Permission
 import com.euv.euvbackendkotlin.user.User
 import com.euv.euvbackendkotlin.user.UserDetailsService
 import com.euv.euvbackendkotlin.user.UserRepository
+import graphql.ErrorType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -38,7 +40,7 @@ class AuthService {
 
     private val logger = Logger.getLogger(AuthService::class.java.name)
 
-    fun signin(data: AccountCredentialsVO): Mono<TokenVO> {
+    fun signin(data: AccountCredentialsDto): Mono<AuthDto> {
         logger.info("Trying log user ${data.email}")
         val username = data.email
         val password = data.password
@@ -46,12 +48,12 @@ class AuthService {
         val retorno = authenticate.map {
             tokenProvider.createAccessToken(it.name, it.authorities.map { aut -> aut.toString() })
         }.onErrorMap {
-            ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request")
+            GraphqlException("Invalid user name or password", ErrorType.ValidationError)
         }
         return retorno
     }
 
-    suspend fun signup(data: AccountCredentialsVO): User {
+    suspend fun signup(data: AccountCredentialsDto): User {
         val username = data.email!!
         val existingUser = userRepository.findByUsername(username)
         if (existingUser != null) throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "User already exists")
@@ -66,7 +68,7 @@ class AuthService {
         logger.info("Trying get refresh token to user $username")
 
         val user = userRepository.findUserByUsername(username)
-        val tokenResponse: TokenVO = if (user != null) {
+        val tokenResponse: AuthDto = if (user != null) {
             tokenProvider.refreshToken(refreshToken)
         } else {
             throw UsernameNotFoundException("Username $username not found!")

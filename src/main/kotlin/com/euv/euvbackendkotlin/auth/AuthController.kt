@@ -16,14 +16,14 @@ class AuthController {
     lateinit var authService: AuthService
 
     @PostMapping(value = ["/signin"])
-    fun signin(@RequestBody data: AccountCredentialsVO?) : Mono<TokenVO> {
+    fun signin(@RequestBody data: AccountCredentialsDto?) : Mono<AuthDto> {
         return if (data!!.email.isNullOrBlank() || data.password.isNullOrBlank())
                 Mono.error(ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request"))
             else authService.signin(data)
     }
 
     @PostMapping(value = ["/signup"])
-    suspend fun signup(@RequestBody data: AccountCredentialsVO?) : User {
+    suspend fun signup(@RequestBody data: AccountCredentialsDto?) : User {
         return authService.signup(data!!)
     }
 

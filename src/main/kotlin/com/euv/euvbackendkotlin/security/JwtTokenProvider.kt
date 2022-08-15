@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.euv.euvbackendkotlin.auth.TokenVO
+import com.euv.euvbackendkotlin.auth.AuthDto
 import com.euv.euvbackendkotlin.exceptions.InvalidJwtAuthenticationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -37,12 +37,12 @@ class JwtTokenProvider {
         algorithm = Algorithm.HMAC512(secretKey.toByteArray())
     }
 
-    fun createAccessToken(username: String, roles: List<String?>) : TokenVO {
+    fun createAccessToken(username: String, roles: List<String?>) : AuthDto {
         val now = Date()
         val validity = Date(now.time + validityInMilliseconds)
         val accessToken = getAccessToken(username, roles, now, validity)
         val refreshToken = getRefreshToken(username, roles, now)
-        return TokenVO(
+        return AuthDto(
             username = username,
             authenticated = true,
             accessToken = accessToken,
@@ -52,7 +52,7 @@ class JwtTokenProvider {
         )
     }
 
-    fun refreshToken(refreshToken: String) : TokenVO {
+    fun refreshToken(refreshToken: String) : AuthDto {
         var token: String = ""
         if(refreshToken.contains("Bearer ")) token = refreshToken.substring("Bearer ".length)
         val verifier: JWTVerifier = JWT.require(algorithm).build()
