@@ -23,7 +23,7 @@ class AuthController {
     }
 
     @PostMapping(value = ["/signup"])
-    suspend fun signup(@RequestBody data: AccountCredentialsDto?) : User {
+    fun signup(@RequestBody data: AccountCredentialsDto?) : Mono<AuthDto> {
         return authService.signup(data!!)
     }
 
@@ -33,6 +33,6 @@ class AuthController {
         return if (refreshToken.isNullOrBlank() || username.isNullOrBlank())
             ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body("Invalid client request")
-            else authService.refreshToken(username, refreshToken)
+            else ResponseEntity.ok(authService.refreshToken(username, refreshToken).block())
     }
 }

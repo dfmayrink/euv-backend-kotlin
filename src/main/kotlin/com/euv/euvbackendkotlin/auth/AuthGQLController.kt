@@ -1,6 +1,7 @@
 package com.euv.euvbackendkotlin.auth
 
 import com.euv.euvbackendkotlin.exceptions.GraphqlException
+import com.euv.euvbackendkotlin.user.User
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -15,9 +16,8 @@ class AuthGQLController(private val authService: AuthService) {
     }
 
     @MutationMapping
-    fun signup(@Argument("auth") accountCredentialsDto: AccountCredentialsDto) : AuthDto {
-        if(true) throw GraphqlException("Invalid user access data")
-        return AuthDto("User", accessToken = "Token", refreshToken = "RefreshToken")
+    fun signup(@Argument("auth") accountCredentialsDto: AccountCredentialsDto) : Mono<AuthDto> {
+        return authService.signup(accountCredentialsDto)
     }
 
 }

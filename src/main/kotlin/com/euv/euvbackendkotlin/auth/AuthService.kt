@@ -53,26 +53,29 @@ class AuthService {
         return retorno
     }
 
-    suspend fun signup(data: AccountCredentialsDto): User {
+    fun signup(data: AccountCredentialsDto): Mono<AuthDto> {
         val username = data.email!!
         val existingUser = userRepository.findByUsername(username)
-        if (existingUser != null) throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "User already exists")
-        val user = User()
-        user.username = username
-        user.password = passwordEncoder.encode(data.password!!)
-        user.permissions = listOf<Permission>(Permission("ROLE_USER")).toMutableList()
-        return userRepository.save(user)
+        val tokenProvider = { user:User -> tokenProvider.createAccessToken(user.username, user.authorities.map { aut -> aut.toString() }) }
+        val orFunction = {
+            val user = User()
+            user.username = username
+            user.password = passwordEncoder.encode(data.password!!)
+            user.permissions = listOf<Permission>(Permission("ROLE_USER")).toMutableList()
+            userRepository.save(user).map(tokenProvider)
+        }
+        return existingUser
+            .flatMap { Mono.error<AuthDto>(GraphqlException("User Already Exists", ErrorType.ValidationError)) }
+            .switchIfEmpty(orFunction())
     }
 
-    fun refreshToken(username: String, refreshToken: String): ResponseEntity<*> {
+    fun refreshToken(username: String, refreshToken: String): Mono<AuthDto> {
         logger.info("Trying get refresh token to user $username")
 
-        val user = userRepository.findUserByUsername(username)
-        val tokenResponse: AuthDto = if (user != null) {
+        return userRepository.findByUsername(username).map {
             tokenProvider.refreshToken(refreshToken)
-        } else {
-            throw UsernameNotFoundException("Username $username not found!")
-        }
-        return ResponseEntity.ok(tokenResponse)
+        }.switchIfEmpty(
+            Mono.error(GraphqlException("Username $username not found!", ErrorType.ValidationError))
+        )
     }
 }

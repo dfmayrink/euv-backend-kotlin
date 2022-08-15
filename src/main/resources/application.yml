@@ -2,7 +2,7 @@ spring:
   security:
     jwt:
       token:
-        secret-key: g4m30v3r53cr37
+        secret-key: g4m30v3r53cr37c23hyfd23
         expire-length: 86400000
   data:
     mongodb:
