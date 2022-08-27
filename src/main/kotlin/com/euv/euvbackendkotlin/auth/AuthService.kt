@@ -10,8 +10,13 @@ import graphql.ErrorType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -77,5 +82,13 @@ class AuthService {
         }.switchIfEmpty(
             Mono.error(GraphqlException("Username $username not found!", ErrorType.ValidationError))
         )
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    fun myAccount() : Mono<AuthDto> {
+        val securityContext = ReactiveSecurityContextHolder.getContext()
+        securityContext.subscribe { println(it.authentication.name) }
+        val security = SecurityContextHolder.getContext()
+        return Mono.just(AuthDto(username = "", accessToken = "", refreshToken = ""));
     }
 }

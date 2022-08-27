@@ -21,6 +21,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.security.Principal
 
 @Controller
 class ProductGQLController(private val productService: ProductService) {

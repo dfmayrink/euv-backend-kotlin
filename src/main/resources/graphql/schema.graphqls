@@ -3,15 +3,23 @@ type Query {
     products(name: String): [Product]
     categories(name: String): [Category]
     signin(auth: AuthInput): Auth
+    myAccount: MyAccount
 }
 type Mutation {
     updateSalary(input: UpdateSalaryInput!): UpdateSalaryPayload
-    signup(auth: AuthInput): Auth
+    signup(register: RegisterInput): Auth
     createProduct(product: ProductInput): Product
     createCategory(category: CategoryInput): Category
 }
 
 input AuthInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    firstName: String!
+    lastName: String!
     email: String!
     password: String!
 }
@@ -25,10 +33,18 @@ type Auth {
     refreshToken: String!
 }
 
+type MyAccount {
+    firstName: String
+    lastName: String
+    email: String!
+    roles: [String]
+}
+
 type Product {
     id: ID!
     name: String!
     description: String!
+    cover: String
     images: [String]
     code: String
     sku: String

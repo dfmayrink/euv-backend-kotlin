@@ -7,6 +7,7 @@ data class ProductDto(
     var id: ObjectId? = null,
     var name: String? = null,
     var description: String? = null,
+    var cover: String? = null,
     var images: List<String>? = null,
     var code: String? = null,
     var sku: String? = null,

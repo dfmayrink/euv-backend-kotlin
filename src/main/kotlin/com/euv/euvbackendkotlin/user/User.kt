@@ -11,7 +11,8 @@ class User : UserDetails {
 
     @Id
     var id: ObjectId = ObjectId()
-
+    var firstName = ""
+    var lastName = ""
     private var username = ""
     private var password = ""
     var accountNonExpired: Boolean? = true

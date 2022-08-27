@@ -13,7 +13,7 @@ class UserDetailsService :
     private lateinit var userRepository: UserRepository
 
     override fun findByUsername(username: String): Mono<UserDetails> {
-        return userRepository.findUserByUsername(username)
+        return userRepository.findByUsername(username)
             .cast(UserDetails::class.java)
     }
 

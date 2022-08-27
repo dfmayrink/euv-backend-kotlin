@@ -1,8 +1,10 @@
 package com.euv.euvbackendkotlin.auth
 
-data class AccountCredentialsDto(
+import java.util.*
+
+data class MyAccountDto(
     val firstName: String? = null,
     val lastName: String? = null,
     val email: String? = null,
-    val password: String? = null,
+    val roles: List<String> = listOf<String>()
 )

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
+import java.security.Principal
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +26,11 @@ class AuthController {
     @PostMapping(value = ["/signup"])
     fun signup(@RequestBody data: AccountCredentialsDto?) : Mono<AuthDto> {
         return authService.signup(data!!)
+    }
+
+    @GetMapping(value = ["/profile"])
+    fun myAccount(principal: Principal?) : Principal? {
+        return principal
     }
 
     @PutMapping(value = ["/refresh/{username}"])
