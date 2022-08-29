@@ -9,6 +9,7 @@ import java.util.*
 data class Product(
     @Id
     var id: ObjectId? = null,
+    var url: String? = null,
     var name: String? = null,
     var description: String? = null,
     var cover: String? = null,

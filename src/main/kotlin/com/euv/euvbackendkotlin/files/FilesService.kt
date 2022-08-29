@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.name
 
 @Service
 class FilesService @Autowired constructor(filesConfig: FilesConfig) {
@@ -26,17 +27,18 @@ class FilesService @Autowired constructor(filesConfig: FilesConfig) {
         }
     }
 
-    fun storeFile(file: FilePart): Any {
+    fun storeFile(file: FilePart, directoryName: String): FileDto {
         val fileName = StringUtils.cleanPath(file.filename())
+        val directory = StringUtils.cleanPath(directoryName)
         return try {
             if (fileName.contains(".."))
                 throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Sorry! Filename contains invalid path sequence $fileName")
-            val targetLocation = fileStorageLocation.resolve(fileName)
+            val directoryPath = fileStorageLocation.resolve(directory)
+            Files.createDirectories(directoryPath)
+
+            val targetLocation = fileStorageLocation.resolve("$directory/$fileName")
             file.transferTo(targetLocation).subscribe()
-            object {
-                val fileName = fileName
-                val targetLocation = targetLocation
-            }
+            FileDto(fileName, "/$directory/$fileName")
         } catch (e: Exception) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not store file $fileName. Please try again!", e)
         }

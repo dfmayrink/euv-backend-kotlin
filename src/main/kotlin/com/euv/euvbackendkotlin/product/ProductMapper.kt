@@ -3,13 +3,13 @@ package com.euv.euvbackendkotlin.product
 object ProductMapper {
     fun convertToDto(product: Product) : ProductDto {
         product.apply {
-            return ProductDto(id, name, description, cover, images, code, sku, price, priceSale, tags, inStock,
+            return ProductDto(id, url, name, description, cover, images, code, sku, price, priceSale, tags, inStock,
                 taxes, category, createdAt)
         }
     }
     fun convertToModel(productInput: ProductDto) : Product {
         productInput.apply {
-            return Product(id, name, description, cover, images, code, sku, price, priceSale, tags, inStock,
+            return Product(id, url, name, description, cover, images, code, sku, price, priceSale, tags, inStock,
                 taxes, category, createdAt)
         }
     }

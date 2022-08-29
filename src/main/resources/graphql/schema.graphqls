@@ -8,7 +8,7 @@ type Query {
 type Mutation {
     updateSalary(input: UpdateSalaryInput!): UpdateSalaryPayload
     signup(register: RegisterInput): Auth
-    createProduct(product: ProductInput): Product
+    saveProduct(product: ProductInput): Product
     createCategory(category: CategoryInput): Category
 }
 
@@ -58,6 +58,7 @@ type Product {
 }
 
 input ProductInput {
+    id: ID
     name: String!
     description: String!
     images: [String],
