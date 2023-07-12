@@ -19,20 +19,20 @@ class AuthController {
     fun signin(@RequestBody data: AccountCredentialsVO?) : Mono<TokenVO> {
         return if (data!!.email.isNullOrBlank() || data.password.isNullOrBlank())
                 Mono.error(ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request"))
-            else authService.signin(data!!)
+            else authService.signin(data)
     }
 
     @PostMapping(value = ["/signup"])
-    suspend fun signup(@RequestBody data: AccountCredentialsVO?) : User {
+    fun signup(@RequestBody data: AccountCredentialsVO?) : Mono<User> {
         return authService.signup(data!!)
     }
 
     @PutMapping(value = ["/refresh/{username}"])
     fun refreshToken(@PathVariable("username") username: String?,
-                     @RequestHeader("Authorization") refreshToken: String?) : ResponseEntity<*> {
+                     @RequestHeader("Authorization") refreshToken: String?) : Mono<ResponseEntity<*>> {
         return if (refreshToken.isNullOrBlank() || username.isNullOrBlank())
-            ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body("Invalid client request")
+            Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("Invalid client request"))
             else authService.refreshToken(username, refreshToken)
     }
 }

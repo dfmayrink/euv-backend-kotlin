@@ -1,15 +1,13 @@
 package com.euv.euvbackendkotlin.auth
 
+import com.euv.euvbackendkotlin.security.JwtTokenProvider
 import com.euv.euvbackendkotlin.user.User
 import com.euv.euvbackendkotlin.user.UserRepository
-import com.euv.euvbackendkotlin.security.JwtTokenProvider
-import com.euv.euvbackendkotlin.user.UserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -30,9 +28,6 @@ class AuthService {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var userDetailsService: UserDetailsService
-
-    @Autowired
     private lateinit var passwordEncoder: PasswordEncoder
 
     private val logger = Logger.getLogger(AuthService::class.java.name)
@@ -43,32 +38,35 @@ class AuthService {
         val password = data.password
         val authenticate = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(username, password))
         val retorno = authenticate.map {
-            tokenProvider.createAccessToken(it.name, it.authorities.map { it -> it.toString() })
+            tokenProvider.createAccessToken(it.name, it.authorities.map { it2 -> it2.toString() })
         }.onErrorMap {
             ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid client request")
         }
         return retorno
     }
 
-    suspend fun signup(data: AccountCredentialsVO): User {
+    fun signup(data: AccountCredentialsVO): Mono<User> {
         val username = data.email!!
         val existingUser = userRepository.findByUsername(username)
-        if (existingUser != null) throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "User already exists")
-        val user = User()
-        user.username = username
-        user.password = passwordEncoder.encode(data.password!!)
-        return userRepository.save(user)
+        return existingUser.map {
+            User()
+        }.switchIfEmpty(
+            Mono.fromCallable {
+                val user = User()
+                user.username = username
+                user.password = passwordEncoder.encode(data.password!!)
+                userRepository.save(user)
+            }.flatMap { it }
+        )
+
     }
 
-    fun refreshToken(username: String, refreshToken: String): ResponseEntity<*> {
+    fun refreshToken(username: String, refreshToken: String): Mono<ResponseEntity<*>> {
         logger.info("Trying get refresh token to user $username")
 
         val user = userRepository.findUserByUsername(username)
-        val tokenResponse: TokenVO = if (user != null) {
-            tokenProvider.refreshToken(refreshToken)
-        } else {
-            throw UsernameNotFoundException("Username $username not found!")
+        return user.map {
+            ResponseEntity.ok(tokenProvider.refreshToken(refreshToken))
         }
-        return ResponseEntity.ok(tokenResponse)
     }
 }

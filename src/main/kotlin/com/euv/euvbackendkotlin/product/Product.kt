@@ -10,7 +10,7 @@ data class Product(
     var id: ObjectId = ObjectId(),
     var name: String = "",
     var description: String = "",
-    var images: List<Object> = ArrayList<Object>(),
+    var images: List<Any> = ArrayList<Any>(),
     var code: String= "",
     var sku: String = "",
     var price: Double = .0,

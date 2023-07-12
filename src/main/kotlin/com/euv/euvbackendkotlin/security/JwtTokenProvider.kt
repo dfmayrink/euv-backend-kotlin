@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.euv.euvbackendkotlin.auth.TokenVO
 import com.euv.euvbackendkotlin.exceptions.InvalidJwtAuthenticationException
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.server.reactive.ServerHttpRequest
@@ -15,10 +16,11 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.util.*
-import javax.annotation.PostConstruct
 
 @Service
 class JwtTokenProvider {
+
+    private val Bearer = "Bearer "
 
     @Value("\${security.jwt.token.secret-key:secret}")
     private var secretKey = "secret"
@@ -53,10 +55,10 @@ class JwtTokenProvider {
     }
 
     fun refreshToken(refreshToken: String) : TokenVO {
-        var token: String = ""
-        if(refreshToken.contains("Bearer ")) token = refreshToken.substring("Bearer ".length)
+        var token = ""
+        if(refreshToken.contains(Bearer)) token = refreshToken.substring(Bearer.length)
         val verifier: JWTVerifier = JWT.require(algorithm).build()
-        var decodedJWT: DecodedJWT = verifier.verify(token)
+        val decodedJWT: DecodedJWT = verifier.verify(token)
         val username: String = decodedJWT.subject
         val roles: List<String> = decodedJWT.getClaim("roles").asList(String::class.java)
         return createAccessToken(username, roles)
@@ -74,7 +76,7 @@ class JwtTokenProvider {
             .trim()
     }
 
-    private fun getRefreshToken(username: String, roles: List<String?>, now: Date): String? {
+    private fun getRefreshToken(username: String, roles: List<String?>, now: Date): String {
         val validityRefreshToken = Date(now.time + validityInMilliseconds * 3)
         return JWT.create()
             .withClaim("roles", roles)
@@ -100,14 +102,14 @@ class JwtTokenProvider {
     fun resolveToken(req: ServerHttpRequest): String? {
         val bearerToken = req.headers.getFirst("Authorization")
         return if(!bearerToken.isNullOrBlank() && bearerToken.startsWith("Bearer ")) {
-            bearerToken.substring("Bearer ".length)
+            bearerToken.substring(Bearer.length)
         } else null
     }
 
     fun validateToken(token: String): Boolean {
         val decodedJWT = decodedToken(token)
         try {
-            if(decodedJWT.expiresAt.before(Date())) false
+            decodedJWT.expiresAt.before(Date())
             return true
         } catch (e: Exception) {
             throw InvalidJwtAuthenticationException("Expired or invalid JWT token!")
